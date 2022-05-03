@@ -1,0 +1,5 @@
+Crear archivo .env para declarar las variable de entorno de coneccionconla base de datos con las siguientes variable dentro
+
+COSECHADORADB_MONGODB_HOST=localhost
+
+COSECHADORADB_MONGODB_DATABASE=Cosechadoradb
