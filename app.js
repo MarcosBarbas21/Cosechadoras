@@ -399,6 +399,8 @@ const generateMap = (coords) => {     //GENERA EL MAPA EN HTML
 
 const mapContainer = (map, coords) => {   //MODIFICA LO QUE ESTA CONTENIDO DENTRO DEL MAPA
   for (let i = 0; i < coords.length; i++) {
+    let color = ['aqua','brown','chocolate','darkmagenta','yellow','springgreen','blue'];
+    console.log(color)
     var tiles = L.tileLayer(
       "https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}",
       {
@@ -408,7 +410,7 @@ const mapContainer = (map, coords) => {   //MODIFICA LO QUE ESTA CONTENIDO DENTR
     ).addTo(map);
 
     var polygon = L.polygon(coords[i], {
-      fillColor: "#f03",
+      color: `${color[i]}`,
     }).addTo(map);
 
     var popup = L.popup()
