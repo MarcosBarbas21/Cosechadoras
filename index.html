@@ -20,11 +20,14 @@
 
 <body>
   <input value="asd" type="file" onChange="readFile(this)" />
-  </br>
-  <label>
-  Pegar las coordenadas:<br>
-  <input type="text" id="polygon"/>
-  </label>
+  </br>    
+    <div id="polygons">
+      <input value="Agregar coordenadas:" type="button" onClick="addPolygon()"/>
+    </div>
+  <!--/br>
+  <div id="voids" >
+    <input value="Agregar vacios" type="button" onClick="addVoid()"/-->
+  </div>
   </br>
   <input value="No se cuales son" type="button" onClick="howToDo()"/>
   </br>
@@ -33,7 +36,9 @@
     <input type="number" id="machineWidth"/>
   </label><br>
   <input value="Ver resultado" type="button" id="generateMapButton" onClick="analyze()"/>
-  <div id="map"></div>
+  <div id="maps">
+    
+  </div>
   <div id="result">
   </div>
   <input type="button" value="Probar con otro" onclick="location.reload()"/>
