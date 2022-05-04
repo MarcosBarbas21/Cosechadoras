@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@200&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+  <title>Document</title>
+</head>
+
+
+<body>
+
+  <div class="mb-3">
+    <label for="formFile" class="form-label">Default file input example</label>
+    <input id="lectura" value="asd" class="form-control" type="file"/>
+  </div>
+  
+    </br>
+    <div class="mb-3">
+      <label>
+        Pegar las coordenadas:<br>
+        <input type="text" id="polygon"/>
+        </label>
+        <!--<input value="No se cuales son" class="btn btn-primary" type="button"/>-->
+    </div>
+  
+  </br>
+  <!--
+  <input value="No se cuales son" class="btn btn-primary" type="button" onClick="howToDo()"/>
+  </br>
+  -->
+  <div class="mb-3">
+    <label for="machineWidth">
+      Ancho de la maquina:<br>
+      <input type="number" id="machineWidth"/>
+    </label>
+      {{!-- <input value="Ver resultado" class="btn btn-primary" type="button" id="generateMapButton" onClick="analyze()"/> --}}
+      <button id="prueba" type="button" class="btn btn-primary">Ver resultado</button>
+  </div>
+  <br>
+  <!--
+  <div class="mb-3">
+    <input value="Ver resultado" class="btn btn-primary" type="button" id="generateMapButton" onClick="analyze()"/>
+    -->
+  <div id="map"></div>
+  <div id="result">
+  </div>
+  <input type="button" class="btn btn-primary" value="Probar con otro" onclick="location.reload()"/>
+  </div>
+   <!--<script src="app.js"> </script>-->
+  <script src="../controllers/index.controllers.js"></script>
+</body>
+
+</html>
