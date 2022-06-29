@@ -58,7 +58,7 @@ const menuAnalizarMapa = () => {
       Ancho de la maquina:<br>
     <input type="number" id="machineWidth"/>
     </label><br>
-    <input value="Ver resultado" type="button" id="generateMapButton" onClick="analyze()"/>
+    <input id="analyzeButton" value="Ver resultado" type="button" id="generateMapButton"/>
     <div id="maps">
     </div>
     <div id="result">
@@ -66,6 +66,10 @@ const menuAnalizarMapa = () => {
     <input type="button" value="Probar con otro" onclick="menuAnalizarMapa()"/>
     <input type="button" value="Volver" onclick="menuMapas()"/>`;
   showLofts();
+  document.getElementById("analyzeButton").addEventListener("click", function(event){
+    analyze();
+    event.preventDefault()
+  });
 };
 
 const menuMapasAnalizados = () => {
@@ -336,16 +340,16 @@ const selectedLofts = () => {
 };
 
 const analyze = async () => {
-  document.getElementById('generateMapButton').style.visibility = 'hidden'; //ESCONDE EL BOTON 'VER RESULTADO DESPUES DE EJECUTAR'
-  let json = recorrido();
+  //document.getElementById('generateMapButton').style.visibility = 'hidden'; //ESCONDE EL BOTON 'VER RESULTADO DESPUES DE EJECUTAR'
+  let json = await recorrido();
+  console.log(json);
   json = JSON.stringify(json)
   //let coordinates = getCoordinates(json); //OBTIENE LAS COORDENADAS
   //console.log(JSON.stringify(json));
   let filteredMap = getValidatedCoordinates(json, json); //VALIDA LAS UTILES
   generateMap('maps', filteredMap, lotes); //GENERA EL MAPA
   areaCalculator(filteredMap); //CALCULA LAS AREAS
-  //alert('Error'); //CASO DE FALLO ALERTA Y ACTUALIZA PAGINA
-  //location.reload();
+  alert('Error'); //CASO DE FALLO ALERTA Y ACTUALIZA PAGINA
 };
 const addPolygon = () => {
   ///FUNCION BOTON 'AGREGAR LOTE'
@@ -360,8 +364,29 @@ const addPolygon = () => {
   }
 };
 
-const recorrido = () => {
-  let coords = data[0] + ' ';
+const recorrido = async () => {
+  let allJsons = [];
+  //localStorage.setItem('asd','dsadasd');
+  //for (let i = 0; i < data.length; i++) {
+      console.log(data[0]);
+      const formData = new FormData()
+      formData.append("file", data[0])
+      let url = 'http://localhost:3000/api/lotes/parse';
+      try {
+      let result = await fetch(url, {
+        method: 'POST',
+        body: formData,
+      });
+      localStorage.setItem('asd',result);
+      allJsons.push(result);
+      console.log(result);
+      } catch(e) {
+        console.log('No result');
+      }
+
+      //allJsons.push(result); //LA ALMACENA EN 'DATA' QUE ES UNA VARIABLE GLOBAL
+  //}
+  /*let coords = data[0] + ' ';
   //console.log(coords);
   let primero = `<coordinates>`;
   let ultimo = `</coordinates>`;
@@ -388,8 +413,9 @@ const recorrido = () => {
     firstCoordIndex = newCoords.lastIndexOf(primeroCoord);
     lastCoordIndex = newCoords.lastIndexOf(ultimoCoord);
   } while (firstCoordIndex != -1 && lastCoordIndex != -1);
-  console.log(coordsArray);
-  return coordsArray;
+  console.log(coordsArray);*/
+  console.log(allJsons);
+  return allJsons;
 };
 
 const confirmLote = async () => {
@@ -453,27 +479,9 @@ const confirmLote = async () => {
   await showLofts();
 };
 
-const readFile = (input) => {
+const readFile = async (input) => {
   //FUNCION QUE LEE EL ARCHIVO
-  let allFiles = input.files;
-  let allLofts = [];
-  for (let i = 0; i < allFiles.length; i++) {
-    console.log(allFiles[i]);
-    try {
-      let file = input.files[i];
-      let fileReader = new FileReader();
-      fileReader.readAsText(file);
-      fileReader.onload = function () {
-        allLofts.push(fileReader.result); //LA ALMACENA EN 'DATA' QUE ES UNA VARIABLE GLOBAL
-      };
-      fileReader.onerror = function () {
-        alert(fileReader.error);
-      };
-    } catch {
-      continue;
-    }
-  }
-  data = allLofts;
+  data = input.files;
   console.log(data);
 };
 
@@ -1030,6 +1038,8 @@ const averageCoords = (coords) => {
 
 const app = async () => {
   //mainMenu();
+  let asd = localStorage.getItem('asd');
+  console.log(asd);
   await menuMapas();
 };
 

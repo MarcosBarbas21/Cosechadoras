@@ -1,29 +1,52 @@
 const express = require('express');
-
+const multer = require('multer');
+const fs = require('fs');
 const LoteService = require('../services/lote.service');
 const validatorHandler = require('../middlewares/validator.handler');
 const {
   createLoteSchema,
   updateLoteSchema,
   getLoteSchema,
-  getParsedKMZ,
 } = require('../schemas/lotes.schema');
 
 const router = express.Router();
 const service = new LoteService();
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './dist');
+  },
+  filename: function (req, file, cb) {
+    //cb('-' + ) );
+    cb(null, file.originalname);
+  },
+});
+const upload = multer({ storage: storage });
 
-/*router.get('/',
-  validatorHandler(getParsedKMZ, 'body'),
-  async (req, res, next) => {
-    try {
-      const body = req.body;
-      const newParsed = await service.parse2(body);
-      res.status(201).json(newParsed);
-    } catch (error) {
-      next(error);
-    }
+router.post('/parse', upload.single('file'), async (req, res, next) => {
+  const file = req.file;
+  if (!file) {
+    const error = new Error('Ingrese un archivo');
+    error.httpStatusCode = 400;
+    return next(error);
   }
-);*/
+  const ext = file.filename.slice(file.filename.length - 3, file.filename.length);
+  console.log(ext);
+  let newJson;
+  const coords = file.path;
+  if (ext == 'kmz') {newJson = await service.parseKmz(coords)}
+  else if (ext == 'kml') {newJson = await service.parseKml(coords)}
+  else {
+    const error = new Error('Formato archivo no valido');
+    error.httpStatusCode = 400;
+    return next(error);
+  }
+  try {
+    fs.unlinkSync(coords);
+  } catch(err) {
+    console.error(err)
+  }
+  res.json(newJson);
+});
 
 router.get('/', async (req, res, next) => {
   try {
@@ -34,25 +57,17 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.patch(
-  '/kml/:coords',
-  validatorHandler(getParsedKMZ, 'params'),
-  async (req, res, next) => {
-    const { coords } = req.body;
-    const newJson = await service.parseKml(coords);
-    res.json(newJson);
-  }
-);
-
-router.patch(
+/*router.patch(
   '/kmz/:coords',
-  validatorHandler(getParsedKMZ, 'params'),
+  //validatorHandler(getParsedKMZ, 'params'),
   async (req, res, next) => {
-    const { coords } = req.body;
-    const newJson = await service.parseKmz(coords);
-    res.json(newJson);
+    const { coords } = req.file;
+    console.log(coords);
+    //const newJson = await service.parseKmz(coords);
+    res.json(coords);
+    //res.json(newJson);
   }
-);
+);*/
 //?name=tom
 
 router.get(

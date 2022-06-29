@@ -1,6 +1,7 @@
 const boom = require('@hapi/boom');
-const parseKMZ = require("parse2-kmz");
+const parseKMZ = require('parse2-kmz');
 const tj = require("@tmcw/togeojson");
+const fs = require('fs');
 // node doesn't have xml parsing or a dom. use xmldom
 const DOMParser = require("xmldom").DOMParser;
 
@@ -22,15 +23,13 @@ class LoteService {
   }
 
   async parseKml(coords) {
-    const kml = new DOMParser().parseFromString(coords);
+    const kml = new DOMParser().parseFromString(fs.readFileSync(coords, "utf8"));
     const rta = tj.kml(kml);
     return rta;
   }
 
   async parseKmz(coords) {
-    //const kml = new DOMParser().parseFromString(coords);
     const kmz = parseKMZ.toJson(coords);
-    //const rta = tj.kml(kml);
     return kmz;
   }
 

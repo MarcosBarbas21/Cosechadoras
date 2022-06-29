@@ -1,11 +1,16 @@
 const express = require('express');
 const cors = require('cors');
+//const SwaggerUI = require('swagger-ui')
 
 const routerApi = require('./routes');//el archivo index.js se busca en automático
 const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/error.handler');
 
 const app = express();
 const port = 3000;
+
+/*SwaggerUI({
+  dom_id: '#myDomId'
+})*/
 
 app.use(express.json());//este es un Middleware
 
@@ -21,9 +26,6 @@ const options = {
 }
 app.use(cors(options));
 
-app.get('/', (req, res) => {
-  res.send('Hola, este es mi primer servidor!')
-});
 
 
 routerApi(app); // Este es el index.js de routing con express como atributo
